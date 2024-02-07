@@ -10,7 +10,7 @@ const App = (props: { store: Store }) => {
   const { store } = props;
   const render = () => (
     <>
-      <Title>Untitled App</Title>
+      <Title>RingCentral Web Phone Demo</Title>
       <Space>
         <Button
           onClick={() => {
