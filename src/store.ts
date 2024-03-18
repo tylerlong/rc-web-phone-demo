@@ -54,9 +54,6 @@ export class Store {
     const authorizeUri = authorizeUriExtension.buildUri({
       redirect_uri: window.location.origin + window.location.pathname + 'callback.html',
     });
-    console.log(authorizeUri);
-
-    // Open a popup window
     window.open(
       authorizeUri,
       'popupWindow',
@@ -71,7 +68,6 @@ export class Store {
         this.rcToken = token.access_token!;
         this.refreshToken = token.refresh_token!;
       }
-      console.log(event.data);
     });
   }
 }
@@ -95,22 +91,25 @@ const main = async () => {
   });
   start();
 
-  // validate saved token
-  if (store.rcToken === '') {
-    return;
-  }
-  const rc = new RingCentral();
-  rc.token = { access_token: store.rcToken, refresh_token: store.refreshToken };
-  try {
-    await rc.restapi().account().extension().get();
-  } catch (e) {
-    try {
-      await rc.refresh();
-    } catch (e) {
-      store.rcToken = '';
-      store.refreshToken = '';
+  const refreshToken = async () => {
+    if (store.rcToken !== '') {
+      const rc = new RingCentral({
+        clientId: store.clientId,
+        clientSecret: store.clientSecret,
+      });
+      rc.token = { access_token: store.rcToken, refresh_token: store.refreshToken };
+      try {
+        await rc.refresh();
+        store.rcToken = rc.token!.access_token!;
+        store.refreshToken = rc.token!.refresh_token!;
+      } catch (e) {
+        store.rcToken = '';
+        store.refreshToken = '';
+      }
     }
-  }
+  };
+  refreshToken();
+  setInterval(() => refreshToken(), 30 * 60 * 1000);
 };
 main();
 
