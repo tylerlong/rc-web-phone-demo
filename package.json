@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@rc-ex/authorize-uri": "^1.1.10",
-    "@rc-ex/core": "^1.3.10"
+    "@rc-ex/core": "^1.3.10",
+    "ringcentral-web-phone": "^1.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.29",

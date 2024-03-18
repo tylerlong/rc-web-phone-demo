@@ -3,6 +3,11 @@ import RingCentral from '@rc-ex/core';
 import localForage from 'localforage';
 import { message } from 'antd';
 import AuthorizeUriExtension from '@rc-ex/authorize-uri';
+import type { WebPhoneRegistrationData } from 'ringcentral-web-phone';
+import WebPhone from 'ringcentral-web-phone';
+
+import incomingAudio from 'url:./audio/incoming.ogg';
+import outgoingAudio from 'url:./audio/outgoing.ogg';
 
 export class Store {
   public rcToken = '';
@@ -108,8 +113,46 @@ const main = async () => {
       }
     }
   };
-  refreshToken();
+  await refreshToken();
   setInterval(() => refreshToken(), 30 * 60 * 1000);
+
+  if (store.rcToken === '') {
+    return;
+  }
+
+  const rc = new RingCentral();
+  rc.token = { access_token: store.rcToken, refresh_token: store.refreshToken };
+  const data = (await rc
+    .restapi()
+    .clientInfo()
+    .sipProvision()
+    .post({
+      sipInfo: [{ transport: 'WSS' }],
+    })) as WebPhoneRegistrationData;
+  const webPhone = new WebPhone(data, {
+    enableDscp: true,
+    clientId: localStorage.getItem('webPhoneclientId')!,
+    audioHelper: {
+      enabled: true,
+      incoming: incomingAudio,
+      outgoing: outgoingAudio,
+    },
+    logLevel: 3,
+    appName: 'WebPhoneDemo',
+    appVersion: '1.0.0',
+    media: {
+      remote: document.getElementById('remoteVideo') as HTMLVideoElement,
+      local: document.getElementById('localVideo') as HTMLVideoElement,
+    },
+    enableQos: true,
+    enableMediaReportLogging: true,
+  });
+  global.webPhone = webPhone;
+
+  // incoming call
+  webPhone.userAgent.on('invite', () => {
+    console.log('incoming call');
+  });
 };
 main();
 
