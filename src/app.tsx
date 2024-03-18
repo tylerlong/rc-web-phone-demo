@@ -27,10 +27,12 @@ const Login = (props: { store: Store }) => {
         ></Input.Password>
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary">Auth Code Flow</Button>
+        <Button type="primary" onClick={() => store.authCodeFlow()}>
+          Auth Code Flow
+        </Button>
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Text>Note: don't forget to set app's redirect URI to the current page's URI.</Text>
+        <Text type="secondary">Note: don't forget to set app's redirect URI to the current page's URI.</Text>
       </Form.Item>
       <Divider>OR</Divider>
       <Form.Item label="JWT Token" required>
@@ -42,7 +44,9 @@ const Login = (props: { store: Store }) => {
         ></Input.Password>
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary">Personal JWT Flow</Button>
+        <Button type="primary" onClick={() => store.jwtFlow()}>
+          Personal JWT Flow
+        </Button>
       </Form.Item>
     </Form>
   );
