@@ -7,6 +7,7 @@ export class Store {
   public refreshToken = '';
   public clientId = '';
   public clientSecret = '';
+  public jwtToken = '';
 }
 
 const store = manage(new Store());
@@ -16,6 +17,7 @@ const main = async () => {
   store.refreshToken = (await localForage.getItem('refreshToken')) ?? '';
   store.clientId = (await localForage.getItem('clientId')) ?? '';
   store.clientSecret = (await localForage.getItem('clientSecret')) ?? '';
+  store.jwtToken = (await localForage.getItem('jwtToken')) ?? '';
 
   // auto save things to local
   const { start } = autoRun(store, () => {
@@ -23,6 +25,7 @@ const main = async () => {
     localForage.setItem('refreshToken', store.refreshToken);
     localForage.setItem('clientId', store.clientId);
     localForage.setItem('clientSecret', store.clientSecret);
+    localForage.setItem('jwtToken', store.jwtToken);
   });
   start();
 

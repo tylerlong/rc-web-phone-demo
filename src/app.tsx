@@ -1,16 +1,16 @@
 import React from 'react';
-import { Input, Typography, Form } from 'antd';
+import { Input, Typography, Form, Button, Divider } from 'antd';
 import { auto } from 'manate/react';
 
 import type { Store } from './store';
 
-const { Text, Title } = Typography;
+const { Title, Text } = Typography;
 
 const Login = (props: { store: Store }) => {
   const { store } = props;
   const render = () => (
     <Form labelCol={{ span: 8 }} wrapperCol={{ span: 8 }}>
-      <Form.Item label="Client ID">
+      <Form.Item label="Client ID" required>
         <Input
           onChange={(e) => {
             store.clientId = e.target.value;
@@ -18,7 +18,7 @@ const Login = (props: { store: Store }) => {
           value={store.clientId}
         ></Input>
       </Form.Item>
-      <Form.Item label="Client Secret">
+      <Form.Item label="Client Secret" required>
         <Input.Password
           onChange={(e) => {
             store.clientSecret = e.target.value;
@@ -26,13 +26,30 @@ const Login = (props: { store: Store }) => {
           value={store.clientSecret}
         ></Input.Password>
       </Form.Item>
+      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Button type="primary">Auth Code Flow</Button>
+      </Form.Item>
+      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Text>Note: don't forget to set app's redirect URI to the current page's URI.</Text>
+      </Form.Item>
+      <Divider>OR</Divider>
+      <Form.Item label="JWT Token" required>
+        <Input.Password
+          onChange={(e) => {
+            store.jwtToken = e.target.value;
+          }}
+          value={store.jwtToken}
+        ></Input.Password>
+      </Form.Item>
+      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Button type="primary">Personal JWT Flow</Button>
+      </Form.Item>
     </Form>
   );
   return auto(render, props);
 };
 
 const Phone = (props: { store: Store }) => {
-  const { store } = props;
   const render = () => <>Phone here</>;
   return auto(render, props);
 };
