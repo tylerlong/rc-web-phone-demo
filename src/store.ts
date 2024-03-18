@@ -52,9 +52,27 @@ export class Store {
     const authorizeUriExtension = new AuthorizeUriExtension();
     await rc.installExtension(authorizeUriExtension);
     const authorizeUri = authorizeUriExtension.buildUri({
-      redirect_uri: window.location.origin + window.location.pathname,
+      redirect_uri: window.location.origin + window.location.pathname + 'callback.html',
     });
     console.log(authorizeUri);
+
+    // Open a popup window
+    window.open(
+      authorizeUri,
+      'popupWindow',
+      `width=600,height=600,left=${window.screenX + 256},top=${window.screenY + 128}`,
+    )!;
+    window.addEventListener('message', async (event) => {
+      if (event.data.source === 'oauth-callback') {
+        const token = await rc.authorize({
+          code: event.data.code,
+          redirect_uri: window.location.origin + window.location.pathname + 'callback.html',
+        });
+        this.rcToken = token.access_token!;
+        this.refreshToken = token.refresh_token!;
+      }
+      console.log(event.data);
+    });
   }
 }
 

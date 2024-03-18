@@ -32,7 +32,10 @@ const Login = (props: { store: Store }) => {
         </Button>
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Text type="secondary">Note: don't forget to set app's redirect URI to the current page's URI.</Text>
+        <Text type="secondary">
+          Note: Set the app's redirect URI to {window.location.origin + window.location.pathname}
+          callback.html
+        </Text>
       </Form.Item>
       <Divider>OR</Divider>
       <Form.Item label="JWT Token" required>
