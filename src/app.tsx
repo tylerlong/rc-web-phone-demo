@@ -54,7 +54,8 @@ const Login = (props: { store: Store }) => {
 };
 
 const Phone = (props: { store: Store }) => {
-  const render = () => <>Phone here</>;
+  const { store } = props;
+  const render = () => <Button onClick={() => store.logout()}>Log out</Button>;
   return auto(render, props);
 };
 

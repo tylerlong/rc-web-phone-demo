@@ -2,6 +2,7 @@ import { autoRun, manage } from 'manate';
 import RingCentral from '@rc-ex/core';
 import localForage from 'localforage';
 import { message } from 'antd';
+import AuthorizeUriExtension from '@rc-ex/authorize-uri';
 
 export class Store {
   public rcToken = '';
@@ -9,6 +10,17 @@ export class Store {
   public clientId = '';
   public clientSecret = '';
   public jwtToken = '';
+
+  public async logout() {
+    const rc = new RingCentral({
+      clientId: this.clientId,
+      clientSecret: this.clientSecret,
+    });
+    rc.token = { access_token: this.rcToken, refresh_token: this.refreshToken };
+    await rc.revoke();
+    this.rcToken = '';
+    this.refreshToken = '';
+  }
 
   public async jwtFlow() {
     if (this.clientId === '' || this.clientSecret === '' || this.jwtToken === '') {
@@ -33,6 +45,16 @@ export class Store {
       message.error('Please input client ID and client secret');
       return;
     }
+    const rc = new RingCentral({
+      clientId: this.clientId,
+      clientSecret: this.clientSecret,
+    });
+    const authorizeUriExtension = new AuthorizeUriExtension();
+    await rc.installExtension(authorizeUriExtension);
+    const authorizeUri = authorizeUriExtension.buildUri({
+      redirect_uri: window.location.origin + window.location.pathname,
+    });
+    console.log(authorizeUri);
   }
 }
 
