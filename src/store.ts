@@ -101,14 +101,16 @@ export class Store {
   public addSession(session: WebPhoneInvitation) {
     global.sessions.push(session);
     this.sessions.push(new CallSession(session));
-    const listner = (newState: SessionState) => {
+    const callSession = this.sessions[this.sessions.length - 1];
+    const listener = (newState: SessionState) => {
+      callSession.state = newState;
       if (newState === SessionState.Terminated) {
-        session.stateChange.removeListener(listner);
+        session.stateChange.removeListener(listener);
         global.sessions = global.sessions.filter((s) => s.request.callId !== session.request.callId);
         this.sessions = this.sessions.filter((s) => s.callId !== session.request.callId);
       }
     };
-    session.stateChange.addListener(listner);
+    session.stateChange.addListener(listener);
   }
 }
 

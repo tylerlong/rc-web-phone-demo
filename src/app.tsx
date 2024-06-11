@@ -1,8 +1,9 @@
 import React from 'react';
 import { Input, Typography, Form, Button, Divider, Space, Alert } from 'antd';
 import { auto } from 'manate/react';
+import { SessionState } from 'sip.js';
 
-import type { Store } from './store';
+import type { Store, CallSession } from './store';
 
 const { Title, Text } = Typography;
 
@@ -65,15 +66,10 @@ const Phone = (props: { store: Store }) => {
       </Button>
       <Space direction="vertical" style={{ display: 'flex' }}>
         {store.sessions.map((session) => {
-          return (
-            <Space key={session.callId}>
-              <Alert
-                type="success"
-                message={`Incoming call from ${session.raw.remoteIdentity.displayName} ${session.raw.remoteIdentity.uri.user}`}
-              />
-              <Button onClick={() => session.accept()}>Answer</Button>
-            </Space>
-          );
+          if (session.state === SessionState.Initial) {
+            return <Ringing key={session.callId} session={session} />;
+          }
+          return <Talking key={session.callId} session={session} />;
         })}
       </Space>
     </>
@@ -81,18 +77,37 @@ const Phone = (props: { store: Store }) => {
   return auto(render, props);
 };
 
-// const Ringing = (props: { store: Store }) => {
-//   const { store } = props;
-//   const render = () => {
-//     return (
-//       <Space direction="vertical" style={{ display: 'flex' }}>
-//         <Alert message="The phone is ringing" type="info" />
-//         <Button block>Answer</Button>
-//       </Space>
-//     );
-//   };
-//   return auto(render, props);
-// };
+const Ringing = (props: { session: CallSession }) => {
+  const { session } = props;
+  const render = () => {
+    return (
+      <Space>
+        <Alert
+          type="warning"
+          message={`Incoming call from ${session.raw.remoteIdentity.displayName} ${session.raw.remoteIdentity.uri.user}`}
+        />
+        <Button onClick={() => session.accept()}>Answer</Button>
+      </Space>
+    );
+  };
+  return auto(render, props);
+};
+
+const Talking = (props: { session: CallSession }) => {
+  const { session } = props;
+  const render = () => {
+    return (
+      <Space>
+        <Alert
+          type="success"
+          message={`You are talking to ${session.raw.remoteIdentity.displayName} ${session.raw.remoteIdentity.uri.user}`}
+        />
+        <Button onClick={() => session.accept()}>Hang up</Button>
+      </Space>
+    );
+  };
+  return auto(render, props);
+};
 
 const App = (props: { store: Store }) => {
   const { store } = props;
