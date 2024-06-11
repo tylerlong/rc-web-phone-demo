@@ -71,9 +71,22 @@ const Phone = (props: { store: Store }) => {
           }
           return <Talking key={session.callId} session={session} />;
         })}
+        {store.sessions.length === 0 && <Dialpad />}
       </Space>
     </>
   );
+  return auto(render, props);
+};
+
+const Dialpad = (props) => {
+  const render = () => {
+    return (
+      <Space>
+        <Input placeholder="16501234567" />
+        <Button type="primary">Call</Button>
+      </Space>
+    );
+  };
   return auto(render, props);
 };
 
@@ -86,7 +99,9 @@ const Ringing = (props: { session: CallSession }) => {
           type="warning"
           message={`Incoming call from ${session.raw.remoteIdentity.displayName} ${session.raw.remoteIdentity.uri.user}`}
         />
-        <Button onClick={() => session.acceptCall()}>Answer</Button>
+        <Button type="primary" onClick={() => session.accept()}>
+          Answer
+        </Button>
       </Space>
     );
   };
@@ -102,7 +117,9 @@ const Talking = (props: { session: CallSession }) => {
           type="success"
           message={`You are talking to ${session.raw.remoteIdentity.displayName} ${session.raw.remoteIdentity.uri.user}`}
         />
-        <Button onClick={() => session.disposeCall()}>Hang up</Button>
+        <Button onClick={() => session.dispose()} danger>
+          Hang up
+        </Button>
       </Space>
     );
   };
