@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Typography, Form, Button, Divider, Alert, Space } from 'antd';
+import { Input, Typography, Form, Button, Divider, Space } from 'antd';
 import { auto } from 'manate/react';
 
 import type { Store } from './store';
@@ -64,28 +64,25 @@ const Phone = (props: { store: Store }) => {
         Log out
       </Button>
       <Space direction="vertical" style={{ display: 'flex' }}>
-        <Ringing store={store} />
+        {store.sessions.length}
       </Space>
     </>
   );
   return auto(render, props);
 };
 
-const Ringing = (props: { store: Store }) => {
-  const { store } = props;
-  const render = () => {
-    if (store.status !== 'ringing') {
-      return <></>;
-    }
-    return (
-      <Space direction="vertical" style={{ display: 'flex' }}>
-        <Alert message="The phone is ringing" type="info" />
-        <Button block>Answer</Button>
-      </Space>
-    );
-  };
-  return auto(render, props);
-};
+// const Ringing = (props: { store: Store }) => {
+//   const { store } = props;
+//   const render = () => {
+//     return (
+//       <Space direction="vertical" style={{ display: 'flex' }}>
+//         <Alert message="The phone is ringing" type="info" />
+//         <Button block>Answer</Button>
+//       </Space>
+//     );
+//   };
+//   return auto(render, props);
+// };
 
 const App = (props: { store: Store }) => {
   const { store } = props;

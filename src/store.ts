@@ -7,6 +7,7 @@ import type { WebPhoneRegistrationData } from 'ringcentral-web-phone';
 import WebPhone from 'ringcentral-web-phone';
 import type { WebPhoneInvitation } from 'ringcentral-web-phone/lib/src/session';
 import { SessionState } from 'sip.js';
+import type { CallSession } from './types';
 
 import incomingAudio from 'url:./audio/incoming.ogg';
 import outgoingAudio from 'url:./audio/outgoing.ogg';
@@ -18,7 +19,7 @@ export class Store {
   public clientSecret = '';
   public jwtToken = '';
 
-  public status: 'idle' | 'ringing' = 'idle';
+  public sessions: CallSession[] = [];
 
   public async logout() {
     const rc = new RingCentral({
@@ -155,7 +156,7 @@ const main = async () => {
 
   // incoming call
   webPhone.userAgent.on('invite', (session: WebPhoneInvitation) => {
-    store.status = 'ringing';
+    store.sessions.push({ callId: session.request.callId, state: session.state });
     session.stateChange.addListener((newState: SessionState) => {
       switch (newState) {
         case SessionState.Initial: {
@@ -176,7 +177,7 @@ const main = async () => {
         }
         case SessionState.Terminated: {
           console.log('Terminated');
-          store.status = 'idle';
+          store.sessions = store.sessions.filter((s) => s.callId !== session.request.callId);
           break;
         }
       }
