@@ -5,6 +5,8 @@ import { message } from 'antd';
 import AuthorizeUriExtension from '@rc-ex/authorize-uri';
 import type { WebPhoneRegistrationData } from 'ringcentral-web-phone';
 import WebPhone from 'ringcentral-web-phone';
+import type { WebPhoneInvitation } from 'ringcentral-web-phone/lib/src/session';
+import { SessionState } from 'sip.js';
 
 import incomingAudio from 'url:./audio/incoming.ogg';
 import outgoingAudio from 'url:./audio/outgoing.ogg';
@@ -15,6 +17,8 @@ export class Store {
   public clientId = '';
   public clientSecret = '';
   public jwtToken = '';
+
+  public status: 'idle' | 'ringing' = 'idle';
 
   public async logout() {
     const rc = new RingCentral({
@@ -137,7 +141,7 @@ const main = async () => {
       incoming: incomingAudio,
       outgoing: outgoingAudio,
     },
-    logLevel: 3,
+    logLevel: 0,
     appName: 'WebPhoneDemo',
     appVersion: '1.0.0',
     media: {
@@ -150,8 +154,33 @@ const main = async () => {
   global.webPhone = webPhone;
 
   // incoming call
-  webPhone.userAgent.on('invite', () => {
-    console.log('incoming call');
+  webPhone.userAgent.on('invite', (session: WebPhoneInvitation) => {
+    store.status = 'ringing';
+    session.stateChange.addListener((newState: SessionState) => {
+      switch (newState) {
+        case SessionState.Initial: {
+          console.log('Initial');
+          break;
+        }
+        case SessionState.Establishing: {
+          console.log('Establishing');
+          break;
+        }
+        case SessionState.Established: {
+          console.log('Established');
+          break;
+        }
+        case SessionState.Terminating: {
+          console.log('Terminating');
+          break;
+        }
+        case SessionState.Terminated: {
+          console.log('Terminated');
+          store.status = 'idle';
+          break;
+        }
+      }
+    });
   });
 };
 main();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Typography, Form, Button, Divider } from 'antd';
+import { Input, Typography, Form, Button, Divider, Alert, Space } from 'antd';
 import { auto } from 'manate/react';
 
 import type { Store } from './store';
@@ -58,7 +58,32 @@ const Login = (props: { store: Store }) => {
 
 const Phone = (props: { store: Store }) => {
   const { store } = props;
-  const render = () => <Button onClick={() => store.logout()}>Log out</Button>;
+  const render = () => (
+    <>
+      <Button id="logout-btn" onClick={() => store.logout()}>
+        Log out
+      </Button>
+      <Space direction="vertical" style={{ display: 'flex' }}>
+        <Ringing store={store} />
+      </Space>
+    </>
+  );
+  return auto(render, props);
+};
+
+const Ringing = (props: { store: Store }) => {
+  const { store } = props;
+  const render = () => {
+    if (store.status !== 'ringing') {
+      return <></>;
+    }
+    return (
+      <Space direction="vertical" style={{ display: 'flex' }}>
+        <Alert message="The phone is ringing" type="info" />
+        <Button block>Answer</Button>
+      </Space>
+    );
+  };
   return auto(render, props);
 };
 
