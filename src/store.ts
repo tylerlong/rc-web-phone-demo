@@ -80,6 +80,19 @@ export class Store {
       }
     });
   }
+
+  public addSession(session: WebPhoneInvitation) {
+    global.sessions.push(session);
+    this.sessions.push({ callId: session.request.callId, state: session.state });
+    const listner = (newState: SessionState) => {
+      if (newState === SessionState.Terminated) {
+        session.stateChange.removeListener(listner);
+        global.sessions = global.sessions.filter((s) => s.request.callId !== session.request.callId);
+        this.sessions = this.sessions.filter((s) => s.callId !== session.request.callId);
+      }
+    };
+    session.stateChange.addListener(listner);
+  }
 }
 
 const store = manage(new Store());
@@ -154,34 +167,11 @@ const main = async () => {
   });
   global.webPhone = webPhone;
 
+  global.sessions = [];
+
   // incoming call
   webPhone.userAgent.on('invite', (session: WebPhoneInvitation) => {
-    store.sessions.push({ callId: session.request.callId, state: session.state });
-    session.stateChange.addListener((newState: SessionState) => {
-      switch (newState) {
-        case SessionState.Initial: {
-          console.log('Initial');
-          break;
-        }
-        case SessionState.Establishing: {
-          console.log('Establishing');
-          break;
-        }
-        case SessionState.Established: {
-          console.log('Established');
-          break;
-        }
-        case SessionState.Terminating: {
-          console.log('Terminating');
-          break;
-        }
-        case SessionState.Terminated: {
-          console.log('Terminated');
-          store.sessions = store.sessions.filter((s) => s.callId !== session.request.callId);
-          break;
-        }
-      }
-    });
+    store.addSession(session);
   });
 };
 main();
