@@ -86,7 +86,7 @@ const Ringing = (props: { session: CallSession }) => {
           type="warning"
           message={`Incoming call from ${session.raw.remoteIdentity.displayName} ${session.raw.remoteIdentity.uri.user}`}
         />
-        <Button onClick={() => session.accept()}>Answer</Button>
+        <Button onClick={() => session.acceptCall()}>Answer</Button>
       </Space>
     );
   };
@@ -102,7 +102,7 @@ const Talking = (props: { session: CallSession }) => {
           type="success"
           message={`You are talking to ${session.raw.remoteIdentity.displayName} ${session.raw.remoteIdentity.uri.user}`}
         />
-        <Button onClick={() => session.accept()}>Hang up</Button>
+        <Button onClick={() => session.disposeCall()}>Hang up</Button>
       </Space>
     );
   };

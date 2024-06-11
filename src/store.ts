@@ -24,8 +24,12 @@ export class CallSession {
     return global.sessions.find((s) => s.request.callId === this.callId) as WebPhoneInvitation;
   }
 
-  public async accept() {
+  public async acceptCall() {
     this.raw.accept();
+  }
+
+  public async disposeCall() {
+    this.raw.dispose();
   }
 }
 
