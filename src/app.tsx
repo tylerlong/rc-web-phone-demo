@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Typography, Form, Button, Divider, Space } from 'antd';
+import { Input, Typography, Form, Button, Divider, Space, Alert } from 'antd';
 import { auto } from 'manate/react';
 
 import type { Store } from './store';
@@ -64,7 +64,17 @@ const Phone = (props: { store: Store }) => {
         Log out
       </Button>
       <Space direction="vertical" style={{ display: 'flex' }}>
-        {store.sessions.length}
+        {store.sessions.map((session) => {
+          return (
+            <Space key={session.callId}>
+              <Alert
+                type="success"
+                message={`Incoming call from ${session.raw.remoteIdentity.displayName} ${session.raw.remoteIdentity.uri.user}`}
+              />
+              <Button onClick={() => session.accept()}>Answer</Button>
+            </Space>
+          );
+        })}
       </Space>
     </>
   );
