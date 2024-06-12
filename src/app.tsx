@@ -71,19 +71,31 @@ const Phone = (props: { store: Store }) => {
           }
           return <Talking key={session.callId} session={session} />;
         })}
-        {store.sessions.length === 0 && <Dialpad />}
+        {store.sessions.length === 0 && <Dialpad store={store} />}
       </Space>
     </>
   );
   return auto(render, props);
 };
 
-const Dialpad = (props) => {
+const Dialpad = (props: { store: Store }) => {
+  const { store } = props;
   const render = () => {
     return (
-      <Space>
-        <Input placeholder="16501234567" />
-        <Button type="primary">Call</Button>
+      <Space direction="vertical" style={{ display: 'flex' }}>
+        <Divider>Inbound Call</Divider>
+        <Text>
+          Logged in as{' '}
+          <strong>
+            {store.extInfo?.contact?.firstName} {store.extInfo?.contact?.lastName}
+          </strong>
+          . You may dial <strong>{store.primaryNumber}</strong> to reach this web phone.
+        </Text>
+        <Divider>Outbound Call</Divider>
+        <Space>
+          <Input placeholder="16501234567" />
+          <Button type="primary">Call</Button>
+        </Space>
       </Space>
     );
   };
@@ -130,7 +142,7 @@ const App = (props: { store: Store }) => {
   const { store } = props;
   const render = () => (
     <>
-      <Title>RingCentral Web Phone Demo</Title>
+      <Title>RingCentral Web Phone React.js Demo</Title>
       {store.rcToken === '' ? <Login store={store} /> : <Phone store={store} />}
     </>
   );

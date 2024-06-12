@@ -6,6 +6,7 @@ import AuthorizeUriExtension from '@rc-ex/authorize-uri';
 import type { WebPhoneRegistrationData } from 'ringcentral-web-phone';
 import WebPhone from 'ringcentral-web-phone';
 import type { WebPhoneInvitation } from 'ringcentral-web-phone/lib/src/session';
+import type GetExtensionInfoResponse from '@rc-ex/core/lib/definitions/GetExtensionInfoResponse';
 import { SessionState } from 'sip.js';
 
 import incomingAudio from 'url:./audio/incoming.ogg';
@@ -39,6 +40,8 @@ export class Store {
   public clientId = '';
   public clientSecret = '';
   public jwtToken = '';
+  public extInfo: GetExtensionInfoResponse;
+  public primaryNumber = '';
 
   public sessions: CallSession[] = [];
 
@@ -163,6 +166,13 @@ const main = async () => {
 
   const rc = new RingCentral();
   rc.token = { access_token: store.rcToken, refresh_token: store.refreshToken };
+
+  // fetch extension and phone number info
+  store.extInfo = await rc.restapi().account().extension().get();
+  const numberList = await rc.restapi().account().extension().phoneNumber().get();
+  store.primaryNumber = numberList.records?.find((n) => n.primary)?.phoneNumber ?? '';
+
+  // create web phone
   const data = (await rc
     .restapi()
     .clientInfo()

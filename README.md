@@ -1,1 +1,1 @@
-# RingCentral Web Phone Demo
+# RingCentral Web Phone React.js Demo
