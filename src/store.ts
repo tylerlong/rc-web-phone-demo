@@ -54,6 +54,7 @@ export class Store {
     await rc.revoke();
     this.rcToken = '';
     this.refreshToken = '';
+    location.reload();
   }
 
   public async jwtFlow() {
@@ -69,6 +70,7 @@ export class Store {
       const token = await rc.authorize({ jwt: this.jwtToken });
       this.rcToken = token.access_token!;
       this.refreshToken = token.refresh_token!;
+      initWithToken();
     } catch (e) {
       message.open({ duration: 10, type: 'error', content: e.message });
     }
@@ -101,6 +103,7 @@ export class Store {
         });
         this.rcToken = token.access_token!;
         this.refreshToken = token.refresh_token!;
+        initWithToken();
       }
     });
   }
@@ -160,10 +163,13 @@ const main = async () => {
   await refreshToken();
   setInterval(() => refreshToken(), 30 * 60 * 1000);
 
+  initWithToken();
+};
+
+const initWithToken = async () => {
   if (store.rcToken === '') {
     return;
   }
-
   const rc = new RingCentral();
   rc.token = { access_token: store.rcToken, refresh_token: store.refreshToken };
 
