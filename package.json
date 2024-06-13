@@ -4,9 +4,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "rm -rf .parcel-cache && parcel build src/index.html src/callback.html --dist-dir docs --public-url ./",
+    "build": "rm -rf .parcel-cache && && rm -rf docs && parcel build src/index.html src/callback.html --dist-dir docs --public-url ./",
     "lint": "eslint --fix '**/*.{ts,tsx,js,jsx}' && prettier --write . && sort-package-json",
-    "serve": "rm -rf .parcel-cache && rm -rf docs && parcel src/index.html src/callback.html --dist-dir docs"
+    "serve": "rm -rf .parcel-cache && rm -rf built && parcel src/index.html src/callback.html --dist-dir built"
   },
   "dependencies": {
     "@rc-ex/authorize-uri": "^1.1.15",
