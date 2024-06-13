@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography } from 'antd';
 import { auto } from 'manate/react';
 
-import type { Store } from './store';
+import type { Store } from './models/store';
 import Login from './components/login';
 import Phone from './components/phone';
 
