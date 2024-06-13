@@ -8,13 +8,19 @@ const Ringing = (props: { session: CallSession }) => {
   const { session } = props;
   const render = () => {
     return (
-      <Space>
+      <Space direction="vertical" style={{ display: 'flex' }}>
         <Alert
           type="warning"
           message={`Incoming call from ${session.raw.remoteIdentity.displayName} ${session.raw.remoteIdentity.uri.user}`}
         />
-        <Button type="primary" onClick={() => session.accept()}>
+        <Button type="primary" onClick={() => session.accept()} block>
           Answer
+        </Button>
+        <Button type="primary" danger onClick={() => session.reject()} block>
+          Reject
+        </Button>
+        <Button onClick={() => session.toVoicemail()} block>
+          To Voicemail
         </Button>
       </Space>
     );

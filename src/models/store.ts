@@ -99,7 +99,6 @@ export class Store {
   }
 
   public call(callee: string) {
-    console.log('I am calling', callee);
     const webPhone = global.webPhone as WebPhone;
     const session = webPhone.userAgent.invite(callee, { fromNumber: this.primaryNumber });
     this.addSession(session as any);
