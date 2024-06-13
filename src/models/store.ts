@@ -84,10 +84,12 @@ export class Store {
   }
 
   public addSession(session: WebPhoneInvitation) {
+    console.log('addSession', session);
     global.sessions.push(session);
     this.sessions.push(new CallSession(session));
     const callSession = this.sessions[this.sessions.length - 1];
     const listener = (newState: SessionState) => {
+      console.log(newState);
       callSession.state = newState;
       if (newState === SessionState.Terminated) {
         session.stateChange.removeListener(listener);

@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head>
+    <title>RingCentral Web Phone Demo</title>
+  </head>
+  <body>
+    <script>const urlSearchParams = new URLSearchParams(new URL(window.location.href).search);
+const code = urlSearchParams.get("code");
+if (code !== null) {
+    window.opener.postMessage({
+        code
+    }, "*");
+    window.close();
+}
+
+</script>
+  <script src="/redirect.b9c8ffaf.js"></script></body>
+</html>
