@@ -4,6 +4,7 @@ import { message } from 'antd';
 import AuthorizeUriExtension from '@rc-ex/authorize-uri';
 import type { WebPhoneInvitation } from 'ringcentral-web-phone/lib/src/session';
 import { SessionState } from 'sip.js';
+import type WebPhone from 'ringcentral-web-phone';
 
 import afterLogin from '../actions/after-login';
 import CallSession from './call-session';
@@ -99,6 +100,9 @@ export class Store {
 
   public call(callee: string) {
     console.log('I am calling', callee);
+    const webPhone = global.webPhone as WebPhone;
+    const session = webPhone.userAgent.invite(callee, { fromNumber: this.primaryNumber });
+    this.addSession(session as any);
   }
 }
 

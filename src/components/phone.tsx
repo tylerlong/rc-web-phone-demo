@@ -3,7 +3,7 @@ import { Button, Space } from 'antd';
 import { auto } from 'manate/react';
 import { SessionState } from 'sip.js';
 
-import type { Store } from '../store';
+import type { Store } from '../models/store';
 import Idle from './idle';
 import Ringing from './ringing';
 import Talking from './talking';

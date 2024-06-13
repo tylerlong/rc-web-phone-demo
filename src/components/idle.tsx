@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Divider, Input, Space, Typography } from 'antd';
+import { auto } from 'manate/react';
 
 import type { Store } from '../models/store';
-import { auto } from 'manate/react';
 
 const Idle = (props: { store: Store }) => {
   const { store } = props;
@@ -20,7 +20,7 @@ const Idle = (props: { store: Store }) => {
         </Typography.Text>
         <Divider>Outbound Call</Divider>
         <Space>
-          <Input placeholder="16501234567" onChange={(e) => setCallee(e.target.value.trim())} />
+          <Input placeholder="16501234567" onChange={(e) => setCallee(e.target.value.trim())} value={callee} />
           <Button
             type="primary"
             onClick={() => {

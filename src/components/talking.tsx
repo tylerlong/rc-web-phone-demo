@@ -2,7 +2,7 @@ import { Alert, Button, Space } from 'antd';
 import { auto } from 'manate/react';
 import React from 'react';
 
-import type { CallSession } from '../store';
+import type { CallSession } from '../models/call-session';
 
 const Talking = (props: { session: CallSession }) => {
   const { session } = props;
