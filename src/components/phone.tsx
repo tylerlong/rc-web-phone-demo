@@ -17,7 +17,7 @@ const Phone = (props: { store: Store }) => {
       </Button>
       <Space direction="vertical" style={{ display: 'flex' }}>
         {store.sessions.map((session) => {
-          if (session.state === SessionState.Initial) {
+          if ((session as any).direction === 'inbound' && session.state === SessionState.Initial) {
             return <Ringing key={session.callId} session={session} />;
           }
           return <Talking key={session.callId} session={session} />;

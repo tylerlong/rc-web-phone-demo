@@ -51,6 +51,7 @@ const afterLogin = async () => {
 
   // incoming call
   webPhone.userAgent.on('invite', (session: WebPhoneInvitation) => {
+    (session as any).direction = 'inbound';
     store.addSession(session);
   });
 };

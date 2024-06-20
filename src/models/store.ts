@@ -103,6 +103,7 @@ export class Store {
   public call(callee: string) {
     const webPhone = global.webPhone as WebPhone;
     const session = webPhone.userAgent.invite(callee, { fromNumber: this.primaryNumber });
+    (session as any).direction = 'outbound';
     this.addSession(session as any);
   }
 }
