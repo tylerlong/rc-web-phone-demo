@@ -4,10 +4,12 @@ import type { SessionState } from 'sip.js';
 export class CallSession {
   public callId: string;
   public state: SessionState;
+  public direction: string;
 
   public constructor(session: WebPhoneInvitation) {
     this.callId = session.request.callId;
     this.state = session.state;
+    this.direction = (session as any).direction;
   }
 
   public get raw(): WebPhoneInvitation {
