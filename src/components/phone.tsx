@@ -8,9 +8,9 @@ import Idle from './idle';
 import Ringing from './ringing';
 import Talking from './talking';
 
-const Phone = (props: { store: Store }) => {
+const Phone = auto((props: { store: Store }) => {
   const { store } = props;
-  const render = () => (
+  return (
     <>
       <Button id="logout-btn" onClick={() => store.logout()}>
         Log out
@@ -26,7 +26,6 @@ const Phone = (props: { store: Store }) => {
       </Space>
     </>
   );
-  return auto(render, props);
-};
+});
 
 export default Phone;

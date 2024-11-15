@@ -6,9 +6,9 @@ import type { Store } from '../models/store';
 
 const { Text } = Typography;
 
-const Login = (props: { store: Store }) => {
+const Login = auto((props: { store: Store }) => {
   const { store } = props;
-  const render = () => (
+  return (
     <Form labelCol={{ span: 8 }} wrapperCol={{ span: 8 }}>
       <Form.Item label="Client ID" required>
         <Input
@@ -53,7 +53,6 @@ const Login = (props: { store: Store }) => {
       </Form.Item>
     </Form>
   );
-  return auto(render, props);
-};
+});
 
 export default Login;

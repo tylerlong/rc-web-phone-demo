@@ -33,7 +33,7 @@ const main = async () => {
         await rc.refresh();
         store.rcToken = rc.token!.access_token!;
         store.refreshToken = rc.token!.refresh_token!;
-      } catch (e) {
+      } catch {
         store.rcToken = '';
         store.refreshToken = '';
       }

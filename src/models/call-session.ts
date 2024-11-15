@@ -24,8 +24,8 @@ export class CallSession {
     this.raw.dispose();
   }
 
-  public async reject() {
-    this.raw.reject();
+  public async decline() {
+    this.raw.decline!();
   }
 
   public async toVoicemail() {
